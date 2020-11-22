@@ -3,6 +3,8 @@ import React, {
   useEffect
 }
 from 'react';
+import RegForm from './regForm';
+import Row from './row';
 
 const Board = () => {
   const [isReg, setIsReg] = useState(false);
@@ -27,49 +29,16 @@ const Board = () => {
   }
 
   const userSave = () => {
-    setUserInfo([
+    setUserList([
       ...userList,
       userInfo
     ])
-  }
 
-  const User = () => {
-    if(isReg){
-      return (
-        <>
-          <table>
-            <tr>
-              <th>아이디</th>
-              <td>
-                <input name="id" onChange={handleValue} value={userInfo.id}/>
-              </td>
-            </tr>
-            <tr>
-              <th>비밀번호</th>
-              <td>
-                <input name="password" onChange={handleValue} value={userInfo.password}/>
-              </td>
-            </tr>
-            <tr>
-              <th>이름</th>
-              <td>
-                <input name="name" onChange={handleValue} value={userInfo.name}/>
-              </td>
-            </tr>
-          </table>
-          
-          <button
-            onClick={userSave}
-          >확인
-          </button>
-          <button
-            onClick={regClose}
-          >닫기
-          </button>
-        </>
-      )
-    }
-    return null;
+    setUserInfo({
+      id: '',
+      password: '',
+      name: ''
+    })
   }
 
   const regClose = () => {
@@ -80,6 +49,26 @@ const Board = () => {
     setIsReg(true);
   }
 
+  const deleteUser = (id) => {
+    setUserList(userList.filter(userInfo => userInfo.id !== id))
+    console.log(id);
+  }
+
+  const userData = (userList) => {
+    return userList.map((userInfo) => {
+      return (
+        <tr key={userInfo.id}>
+          <td>{userInfo.id}</td>
+          <td>{userInfo.password}</td>
+          <td>{userInfo.name}</td>
+          <td>
+            <button onClick={() => deleteUser(userInfo.id)}>닫기</button>
+          </td>
+        </tr>
+      )
+    })
+  }
+
   return (
   <>
     <div>테이블</div>
@@ -87,7 +76,30 @@ const Board = () => {
       onClick={regOpen}
     >등록
     </button>
-    <User></User>
+    <table>
+      <thead>
+        <tr>
+          <th>아이디</th>
+          <th>비밀번호</th>
+          <th>이름</th>
+          <th>비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+        {userData(userList)}
+      </tbody>
+    </table>
+    <RegForm key="test"
+      userSave={userSave}
+      regClose={regClose}
+      handleValue={handleValue}
+      userInfo={userInfo}
+      isReg={isReg}
+    >
+    </RegForm>
   </>
   )
 
